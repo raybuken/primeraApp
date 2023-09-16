@@ -9,9 +9,19 @@ export default function Page() {
   const [data, setData] = useState([]);
 
   const getPokemonList = () => {
-    fetch("https://pokeapi.co/api/v2/pokemon?limit=151")
+    fetch("https://pokeapi.co/api/v2/pokemon?limit=50")
       .then(res => res.json())
-      .then(data => setData(data.results))
+      .then(data => {
+        const pokemonList = data.results
+
+        pokemonList.map(pokemon => {
+          const id = pokemon.url.split("/")[6]
+          const sprite = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`
+          pokemon.sprite = sprite
+          return pokemon
+        })
+        setData(pokemonList)
+      })
       .catch((err) => {
         console.log(err);
       })

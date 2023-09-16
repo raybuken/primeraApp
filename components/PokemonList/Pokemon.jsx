@@ -7,7 +7,10 @@ function Pokemon({data}) {
   return (
     <>
       <View style={styles.container}>
-        <Text style={styles.text}>{data.name}</Text>
+        <View style={{flexDirection: "row", gap: 10}}>
+          <Image style={styles.image} source={{uri: data.sprite}} alt={data.name}/>
+          <Text style={styles.text}>{data.name}</Text>
+        </View>
         <Link href={`details/${data.name}`} asChild>
           <Button title="Ver" color='primary' />
         </Link>
@@ -28,6 +31,10 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 26,
     textTransform: "capitalize"
+  },
+  image: {
+    width: 32,
+    height: 32
   },
   link:{
     fontSize: 16,
