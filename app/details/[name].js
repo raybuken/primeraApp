@@ -1,9 +1,11 @@
 import React from 'react'
-import { View } from 'react-native'
+import { Text, View } from 'react-native'
 
 function Details() {
   return (
-    <View>details</View>
+    <View>
+      <Text>details</Text> 
+    </View>
   )
 }
 

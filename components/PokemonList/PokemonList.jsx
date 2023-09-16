@@ -1,4 +1,3 @@
-
 import React from 'react'
 import { SafeAreaView, ScrollView, StyleSheet } from 'react-native'
 import Pokemon from './Pokemon'
