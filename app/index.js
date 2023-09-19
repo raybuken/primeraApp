@@ -6,27 +6,56 @@ import PokemonList from "../components/PokemonList/PokemonList";
 
 export default function Page() {
   const [loading, setLoading] = useState(true);
-  const [data, setData] = useState([]);
+  const [list, setList] = useState([]);
+  const [count, setCount] = useState(0);
+  const [loadingButton, setLoadingButton] = useState(false);
 
   const getPokemonList = () => {
-    fetch("https://pokeapi.co/api/v2/pokemon?limit=50")
+    fetch("https://pokeapi.co/api/v2/pokemon?limit=20")
       .then(res => res.json())
       .then(data => {
         const pokemonList = data.results
 
         pokemonList.map(pokemon => {
-          const id = pokemon.url.split("/")[6]
-          const sprite = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`
-          pokemon.sprite = sprite
-          return pokemon
+          return getPokemon(pokemon)
         })
-        setData(pokemonList)
+        setList(pokemonList)
+        setCount(data.count)
       })
       .catch((err) => {
         console.log(err);
       })
       .finally(() => setLoading(false));
   };
+
+  const getPokemon = (pokemon) =>{
+    const id = pokemon.url.split("/")[6]
+    const sprite = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`
+    pokemon.sprite = sprite
+    return pokemon
+  }
+
+  const loadMorePokemon = () => {
+    setLoadingButton(true)
+    const currentCount = list.length
+
+    fetch(`https://pokeapi.co/api/v2/pokemon?offset=${currentCount}&limit=20`)
+    .then(res => res.json())
+    .then(data => {
+      const pokemonList = data.results
+
+      pokemonList.map(pokemon => {
+        return getPokemon(pokemon)
+      })
+
+      const newPokemonList = [...list].concat(pokemonList)
+      setList(newPokemonList)
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+    .finally(() => setLoadingButton(false))
+  }
 
   useEffect(() => {
     getPokemonList();
@@ -37,7 +66,7 @@ export default function Page() {
       {loading ? <Loading />: (
       <>
         <Text style={styles.title}>Pokedex</Text>
-        <PokemonList list={data}/>
+          <PokemonList list={list} update={loadMorePokemon} count={count} loadingButton={loadingButton}/>
         <StatusBar/>
       </>
       ) }
