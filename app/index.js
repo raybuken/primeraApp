@@ -9,7 +9,7 @@ export default function Page() {
   const [data, setData] = useState([]);
 
   const getPokemonList = () => {
-    fetch("https://pokeapi.co/api/v2/pokemon?limit=50")
+    fetch("https://pokeapi.co/api/v2/pokemon?limit=10")
       .then(res => res.json())
       .then(data => {
         const pokemonList = data.results
